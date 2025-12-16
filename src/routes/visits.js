@@ -1,0 +1,26 @@
+const express = require('express');
+const {
+  createPlannedVisit,
+  createUnplannedVisit,
+  checkIn,
+  checkOut,
+  getVisits,
+  cancelVisit
+} = require('../controllers/visitController');
+const { protect, authorize } = require('../middlewares/auth');
+
+const router = express.Router();
+
+router.post('/planned', protect, authorize('manager', 'admin'), createPlannedVisit);
+router.post('/unplanned', protect, authorize('executive'), createUnplannedVisit);
+router.post('/:id/checkin', protect, authorize('executive'), checkIn);
+router.post('/:id/checkout', protect, authorize('executive'), checkOut);
+router.get('/', protect, getVisits);
+router.put(
+  '/:id/cancel',
+  protect,
+  cancelVisit
+);
+
+
+module.exports = router;
