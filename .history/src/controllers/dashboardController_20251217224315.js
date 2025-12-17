@@ -21,7 +21,6 @@ exports.getDashboard = async (req, res, next) => {
       home: {
         greeting,
         user,
-        quickOverview,
         dashboard
       }
     });

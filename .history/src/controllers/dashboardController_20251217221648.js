@@ -2,8 +2,6 @@ const Dashboard = require('../models/Dashboard');
 const User = require('../models/User');
 const { logActivity } = require('../utils/logger');
 const { getGreetingByTime } = require('../utils/greetings');
-const { getUserQuickOverview } = require('../utils/quickOverview');
-
 
 
 /* ===== USER DASHBOARD ===== */
@@ -13,7 +11,7 @@ exports.getDashboard = async (req, res, next) => {
     const greeting = getGreetingByTime();
     const user = await User.findById(req.user.id)
       .select('name email role employeeId');
-    const quickOverview = await getUserQuickOverview(req.user.id);
+
     const dashboard = await Dashboard.getActiveDashboard();
 
     res.json({
@@ -21,7 +19,6 @@ exports.getDashboard = async (req, res, next) => {
       home: {
         greeting,
         user,
-        quickOverview,
         dashboard
       }
     });

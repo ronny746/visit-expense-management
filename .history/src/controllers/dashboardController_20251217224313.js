@@ -2,7 +2,7 @@ const Dashboard = require('../models/Dashboard');
 const User = require('../models/User');
 const { logActivity } = require('../utils/logger');
 const { getGreetingByTime } = require('../utils/greetings');
-const { getUserQuickOverview } = require('../utils/quickOverview');
+const { getUserQuickOverview } = require('../utils/');
 
 
 
@@ -21,7 +21,6 @@ exports.getDashboard = async (req, res, next) => {
       home: {
         greeting,
         user,
-        quickOverview,
         dashboard
       }
     });

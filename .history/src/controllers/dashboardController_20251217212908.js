@@ -1,35 +1,17 @@
 const Dashboard = require('../models/Dashboard');
 const User = require('../models/User');
 const { logActivity } = require('../utils/logger');
-const { getGreetingByTime } = require('../utils/greetings');
-const { getUserQuickOverview } = require('../utils/quickOverview');
-
-
 
 /* ===== USER DASHBOARD ===== */
 exports.getDashboard = async (req, res, next) => {
   try {
-
-    const greeting = getGreetingByTime();
-    const user = await User.findById(req.user.id)
-      .select('name email role employeeId');
-    const quickOverview = await getUserQuickOverview(req.user.id);
-    const dashboard = await Dashboard.getActiveDashboard();
-
-    res.json({
-      success: true,
-      home: {
-        greeting,
-        user,
-        quickOverview,
-        dashboard
-      }
-    });
+    const user = await User.find(req.user.id);
+    const data = await Dashboard.getActiveDashboard();
+    res.json({ success: true,user });
   } catch (err) {
     next(err);
   }
 };
-
 
 /* ===== ADMIN: FULL DASHBOARD ===== */
 exports.getAdminDashboard = async (req, res, next) => {
