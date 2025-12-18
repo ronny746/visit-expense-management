@@ -48,12 +48,11 @@ exports.createPlannedVisit = async (req, res, next) => {
 
 exports.createUnplannedVisit = async (req, res, next) => {
   try {
-    const {plannedDate, fromAddress, toAddress, purpose, fromLocation, toLocation } = req.body;
+    const { fromAddress, toAddress, purpose, fromLocation, toLocation } = req.body;
 
     const visit = await Visit.create({
       visitType: 'unplanned',
       executiveId: req.user.id,
-      plannedDate,
       fromAddress,
       toAddress,
       fromLocation,
@@ -215,14 +214,11 @@ exports.getVisits = async (req, res, next) => {
       .populate('executiveId', 'name employeeId')
       .populate('managerId', 'name employeeId')
       .sort({ plannedDate: -1 });
-    const user = await User.findById(req.user.id).select('isUnplannedActive');
-  
 
     res.json({
       success: true,
       count: visits.length,
-      unplanned: { "type": "unplanned",  active: user?.isUnplannedActive ?? true },
-      visit: visits,
+      data: visits,
     });
   } catch (error) {
     next(error);

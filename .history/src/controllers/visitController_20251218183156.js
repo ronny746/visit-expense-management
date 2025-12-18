@@ -186,14 +186,23 @@ exports.getVisits = async (req, res, next) => {
   try {
     const query = {};
 
-    
+    /* ===== ROLE BASED DATA ===== */
     if (req.user.role === 'executive') {
       query.executiveId = req.user.id;
-    } else if (req.user.role === 'manager') {
-      query.managerId = req.user.id;
+
+      // executive ko sirf active unplanned dikhenge
+      query.$or = [
+        { visitType: 'planned' },
+        { visitType: 'unplanned', isUnplannedActive: true }
+      ];
     }
 
-    // ✅ Date filter (fromDate & toDate)
+    if (req.user.role === 'manager') {
+      query.managerId = req.user.id;
+      // manager ko sab dikhega (active + inactive)
+    }
+
+    /* ===== DATE FILTER ===== */
     const { fromDate, toDate } = req.query;
 
     if (fromDate || toDate) {
@@ -204,7 +213,6 @@ exports.getVisits = async (req, res, next) => {
       }
 
       if (toDate) {
-        // include full day
         const endDate = new Date(toDate);
         endDate.setHours(23, 59, 59, 999);
         query.plannedDate.$lte = endDate;
@@ -215,19 +223,17 @@ exports.getVisits = async (req, res, next) => {
       .populate('executiveId', 'name employeeId')
       .populate('managerId', 'name employeeId')
       .sort({ plannedDate: -1 });
-    const user = await User.findById(req.user.id).select('isUnplannedActive');
-  
 
     res.json({
       success: true,
       count: visits.length,
-      unplanned: { "type": "unplanned",  active: user?.isUnplannedActive ?? true },
-      visit: visits,
+      data: visits
     });
   } catch (error) {
     next(error);
   }
 };
+
 
 
 exports.cancelVisit = async (req, res, next) => {

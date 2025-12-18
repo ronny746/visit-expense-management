@@ -221,8 +221,8 @@ exports.getVisits = async (req, res, next) => {
     res.json({
       success: true,
       count: visits.length,
-      unplanned: { "type": "unplanned",  active: user?.isUnplannedActive ?? true },
-      visit: visits,
+      unplanned: { "type": "unplanned", "active": true },
+      data: visits,
     });
   } catch (error) {
     next(error);

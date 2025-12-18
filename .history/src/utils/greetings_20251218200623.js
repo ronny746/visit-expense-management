@@ -6,7 +6,6 @@ function getGreetingByTime(date = new Date()) {
 
   const hour = indiaTime.getHours();
 
-
   if (hour >= 4 && hour < 12) {
     return "Good Morning";
   }

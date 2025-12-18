@@ -215,14 +215,11 @@ exports.getVisits = async (req, res, next) => {
       .populate('executiveId', 'name employeeId')
       .populate('managerId', 'name employeeId')
       .sort({ plannedDate: -1 });
-    const user = await User.findById(req.user.id).select('isUnplannedActive');
-  
 
     res.json({
       success: true,
       count: visits.length,
-      unplanned: { "type": "unplanned",  active: user?.isUnplannedActive ?? true },
-      visit: visits,
+      data: visits,
     });
   } catch (error) {
     next(error);

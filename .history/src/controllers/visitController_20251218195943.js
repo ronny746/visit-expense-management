@@ -222,7 +222,7 @@ exports.getVisits = async (req, res, next) => {
       success: true,
       count: visits.length,
       unplanned: { "type": "unplanned",  active: user?.isUnplannedActive ?? true },
-      visit: visits,
+      Visit: visits,
     });
   } catch (error) {
     next(error);

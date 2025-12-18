@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
-  isUnplannedActive: {
+  unplannedVisitAccess: {
     type: Boolean,
     default: true   // active by default
   }
